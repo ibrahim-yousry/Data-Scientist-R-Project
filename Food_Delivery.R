@@ -16,7 +16,7 @@ library(shinythemes)
 library(DT)
 library(arulesViz)
 # Read data
-df <- read_csv("D:\My project/Food_Delivery_Times.csv")
+df <- read_csv("D:/faculty/R project/Food_Delivery_Times.csv")
 #inspect dataset
 str(df)
 summary(df)
@@ -62,8 +62,8 @@ outlier3<-boxplot(df$Preparation_Time_min)$out
 outlier4<-boxplot(df$Courier_Experience_yrs)$out
 lower_limit <- 10
 higher_limit<-110
-df <- df[ -which(df$Delivery_Time_min< lower_limit), ]
-df <- df[ -which(df$Delivery_Time_min>higher_limit), ]
+df <- df[df$Delivery_Time_min >= lower_limit, ]
+df <- df[df$Delivery_Time_min <= higher_limit, ]
 outlier<-boxplot(df$Delivery_Time_min)$out
 print(df)
 boxplot(df[,9])
@@ -74,7 +74,7 @@ View(df)
 
 boxplot(df[,10])
 outlier5<-boxplot(df$Speed_km_per_min)$out
-df=df[-which(df$Speed_km_per_min%in%outlier5),]
+df=df[!df$Speed_km_per_min%in%outlier5,]
 outlier5<-boxplot(df$Speed_km_per_min)$out
 
 summary(df)
@@ -265,40 +265,40 @@ str(transactions_Data)
 
 
 transactions <- as(transactions_Data, "transactions")
-inspect(transactions[1:12])
+inspect(head(transactions, 12))
 
 Rules <- apriori(transactions, parameter=list(supp=0.01, conf=0.4, minlen=2))
-inspect(Rules[1:12])
+inspect(head(Rules, 12))
 inspect(head(sort(Rules, by="confidence", decreasing = TRUE), 12))
 inspect(head(sort(Rules, by="lift", decreasing=TRUE), 10))
 
 late_Rules <- subset(Rules, rhs %in% "Late_Delivery=Late")
 late_Rules <- sort(late_Rules, by="lift", decreasing = TRUE)
-inspect(late_Rules[1:12])
+inspect(head(late_Rules, 12))
 
 fast_Rules <- subset(Rules, rhs %in% c("Delivery_status=Fast", "Delivery_status=Very Fast"))
 fast_Rules <- sort(fast_Rules, by="confidence", decreasing = FALSE)
-inspect(fast_Rules[1:12])
+inspect(head(fast_Rules, 12))
 
 
 slow_Rules <- subset(Rules, rhs %in% c("Delivery_status=Slow"))
 slow_Rules <- sort(slow_Rules, by="lift", decreasing = FALSE)
-inspect(slow_Rules[1:12])
+inspect(head(slow_Rules, 12))
 
 
 excellent_Rules <- subset(Rules, rhs %in% "Customer_Ratings_status=excellent")
 excellent_Rules <- sort(excellent_Rules, by="lift", decreasing = FALSE)
-inspect(excellent_Rules[1:12])
+inspect(head(excellent_Rules, 12))
 
 
 fast_speed_Rules <- subset(Rules, rhs %in% "Speed_status=Fast speed")
 fast_speed_Rules <- sort(fast_speed_Rules, by="lift", decreasing = FALSE)
-inspect(fast_speed_Rules[1:12])
+inspect(head(fast_speed_Rules, 12))
 
 
 high_exp_Rules <- subset(Rules, rhs %in% "Experience_status=High_Exp")
 high_exp_Rules <- sort(high_exp_Rules, by="lift", decreasing = FALSE)
-inspect(high_exp_Rules[1:12])
+inspect(head(high_exp_Rules, 12))
 
 par(mar = c(4,4,2,1))
 plot(1:10)
@@ -382,9 +382,6 @@ sil_scores
 set.seed(123)
 k <- 3
 km_res <- kmeans(ClusteringData, centers = k, nstart = 25)
-kmeans(
-  
-)
 
 km_res
 km_res$size
